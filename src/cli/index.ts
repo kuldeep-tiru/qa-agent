@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname } from 'node:path';
 import { runDoctor } from './doctor.js';
 import { scaffoldProject } from './scaffold.js';
+import { runValidate } from './validate.js';
 
 const rootDir = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
 
@@ -22,6 +23,11 @@ program
     const dir = scaffoldProject(rootDir, name);
     console.log(`\nCreated project: ${dir}\nNext (Week 2+): qa-agent ingest --url <demo-site>\n`);
   });
+
+program
+  .command('validate <project>')
+  .description('Validate projects/<project>/graph.json against the requirement graph schema')
+  .action((project: string) => runValidate(rootDir, project));
 
 // ---- Stubs: every agent exists from day 1, hardened per the roadmap ----
 const stub = (week: string, what: string) => () =>

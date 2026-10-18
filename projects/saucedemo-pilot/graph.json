@@ -1,6 +1,390 @@
 {
   "project": "saucedemo-pilot",
   "version": "0.1",
-  "modules": [],
-  "notes": "Requirement graph. Reviewed by human before test generation. Populated by `qa-agent ingest` (Week 3)."
+  "baseUrl": "https://www.saucedemo.com",
+  "notes": "Hand-written pilot graph for the public SauceDemo demo site. SauceDemo has no requirements document, so requirementRef values use our own numbering. Test users are the public ones listed on the login page.",
+  "modules": [
+    {
+      "id": "Auth",
+      "name": "Authentication",
+      "features": [
+        {
+          "id": "Login",
+          "name": "Login",
+          "requirementRef": "BR 1.1",
+          "scenarios": [
+            {
+              "id": "ValidLogin",
+              "title": "Login with a valid username and password",
+              "preconditions": [
+                "User is on the SauceDemo login page"
+              ],
+              "triggers": [
+                "User enters standard_user and secret_sauce",
+                "User clicks Login"
+              ],
+              "acceptanceCriteria": [
+                {
+                  "id": "AC-AUTH-01",
+                  "text": "User is redirected to the products page"
+                },
+                {
+                  "id": "AC-AUTH-02",
+                  "text": "The products page shows the inventory list"
+                }
+              ],
+              "testType": "Functional"
+            },
+            {
+              "id": "InvalidPassword",
+              "title": "Login with a valid username and a wrong password",
+              "preconditions": [
+                "User is on the SauceDemo login page"
+              ],
+              "triggers": [
+                "User enters standard_user and an incorrect password",
+                "User clicks Login"
+              ],
+              "acceptanceCriteria": [
+                {
+                  "id": "AC-AUTH-03",
+                  "text": "An error message states that username and password do not match any user"
+                },
+                {
+                  "id": "AC-AUTH-04",
+                  "text": "The user stays on the login page"
+                }
+              ],
+              "testType": "Negative"
+            },
+            {
+              "id": "LockedOutUser",
+              "title": "Login with a locked out user",
+              "preconditions": [
+                "User is on the SauceDemo login page"
+              ],
+              "triggers": [
+                "User enters locked_out_user and secret_sauce",
+                "User clicks Login"
+              ],
+              "acceptanceCriteria": [
+                {
+                  "id": "AC-AUTH-05",
+                  "text": "An error message states that the user has been locked out"
+                }
+              ],
+              "testType": "Negative"
+            },
+            {
+              "id": "EmptyCredentials",
+              "title": "Login with empty username and password",
+              "preconditions": [
+                "User is on the SauceDemo login page"
+              ],
+              "triggers": [
+                "User leaves both fields empty",
+                "User clicks Login"
+              ],
+              "acceptanceCriteria": [
+                {
+                  "id": "AC-AUTH-06",
+                  "text": "An error message states that the username is required"
+                }
+              ],
+              "testType": "Validation"
+            },
+            {
+              "id": "EmptyPassword",
+              "title": "Login with a username and an empty password",
+              "preconditions": [
+                "User is on the SauceDemo login page"
+              ],
+              "triggers": [
+                "User enters standard_user and leaves the password empty",
+                "User clicks Login"
+              ],
+              "acceptanceCriteria": [
+                {
+                  "id": "AC-AUTH-07",
+                  "text": "An error message states that the password is required"
+                }
+              ],
+              "testType": "Validation"
+            }
+          ]
+        },
+        {
+          "id": "Logout",
+          "name": "Logout",
+          "requirementRef": "BR 1.2",
+          "scenarios": [
+            {
+              "id": "LogoutFromMenu",
+              "title": "Logout using the side menu",
+              "preconditions": [
+                "User is logged in as standard_user",
+                "User is on the products page"
+              ],
+              "triggers": [
+                "User opens the menu",
+                "User clicks Logout"
+              ],
+              "acceptanceCriteria": [
+                {
+                  "id": "AC-AUTH-08",
+                  "text": "User is returned to the login page"
+                },
+                {
+                  "id": "AC-AUTH-09",
+                  "text": "Opening the products page URL directly shows an access error instead of the inventory"
+                }
+              ],
+              "testType": "State and Session"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "Inventory",
+      "name": "Product Inventory",
+      "features": [
+        {
+          "id": "Listing",
+          "name": "Product listing",
+          "requirementRef": "BR 2.1",
+          "scenarios": [
+            {
+              "id": "ProductsDisplayed",
+              "title": "Products page lists all products",
+              "preconditions": [
+                "User is logged in as standard_user",
+                "User is on the products page"
+              ],
+              "triggers": [
+                "User views the products page"
+              ],
+              "acceptanceCriteria": [
+                {
+                  "id": "AC-INV-01",
+                  "text": "Six products are listed"
+                },
+                {
+                  "id": "AC-INV-02",
+                  "text": "Each product shows an image, name, description, price and an Add to cart button"
+                }
+              ],
+              "testType": "Content"
+            }
+          ]
+        },
+        {
+          "id": "Sorting",
+          "name": "Product sorting",
+          "requirementRef": "BR 2.2",
+          "scenarios": [
+            {
+              "id": "SortByName",
+              "title": "Sort products by name",
+              "preconditions": [
+                "User is logged in as standard_user",
+                "User is on the products page"
+              ],
+              "triggers": [
+                "User selects Name (A to Z)",
+                "User selects Name (Z to A)"
+              ],
+              "acceptanceCriteria": [
+                {
+                  "id": "AC-INV-03",
+                  "text": "Products are ordered alphabetically for A to Z"
+                },
+                {
+                  "id": "AC-INV-04",
+                  "text": "Products are in reverse alphabetical order for Z to A"
+                }
+              ],
+              "testType": "Functional"
+            },
+            {
+              "id": "SortByPrice",
+              "title": "Sort products by price",
+              "preconditions": [
+                "User is logged in as standard_user",
+                "User is on the products page"
+              ],
+              "triggers": [
+                "User selects Price (low to high)",
+                "User selects Price (high to low)"
+              ],
+              "acceptanceCriteria": [
+                {
+                  "id": "AC-INV-05",
+                  "text": "Products are ordered from the lowest to the highest price"
+                },
+                {
+                  "id": "AC-INV-06",
+                  "text": "Products are ordered from the highest to the lowest price"
+                }
+              ],
+              "testType": "Functional"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "Cart",
+      "name": "Shopping Cart",
+      "features": [
+        {
+          "id": "CartItems",
+          "name": "Cart items",
+          "requirementRef": "BR 3.1",
+          "scenarios": [
+            {
+              "id": "AddToCart",
+              "title": "Add a product to the cart",
+              "preconditions": [
+                "User is logged in as standard_user",
+                "User is on the products page"
+              ],
+              "triggers": [
+                "User clicks Add to cart on a product"
+              ],
+              "acceptanceCriteria": [
+                {
+                  "id": "AC-CART-01",
+                  "text": "The cart badge shows the number of items added"
+                },
+                {
+                  "id": "AC-CART-02",
+                  "text": "The button on that product changes to Remove"
+                }
+              ],
+              "testType": "Functional"
+            },
+            {
+              "id": "RemoveFromCart",
+              "title": "Remove a product from the cart",
+              "preconditions": [
+                "User is logged in as standard_user",
+                "At least one product is in the cart"
+              ],
+              "triggers": [
+                "User opens the cart",
+                "User clicks Remove on a product"
+              ],
+              "acceptanceCriteria": [
+                {
+                  "id": "AC-CART-03",
+                  "text": "The product disappears from the cart list"
+                },
+                {
+                  "id": "AC-CART-04",
+                  "text": "The cart badge count decreases"
+                }
+              ],
+              "testType": "Functional"
+            },
+            {
+              "id": "CartPersistsOnNavigation",
+              "title": "Cart contents stay when navigating between pages",
+              "preconditions": [
+                "User is logged in as standard_user",
+                "At least one product is in the cart"
+              ],
+              "triggers": [
+                "User opens a product detail page and returns to the products page"
+              ],
+              "acceptanceCriteria": [
+                {
+                  "id": "AC-CART-05",
+                  "text": "The cart badge count is unchanged after navigating"
+                }
+              ],
+              "testType": "State and Session"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "Checkout",
+      "name": "Checkout",
+      "features": [
+        {
+          "id": "CheckoutInfo",
+          "name": "Checkout information",
+          "requirementRef": "BR 4.1",
+          "scenarios": [
+            {
+              "id": "CheckoutRequiredFields",
+              "title": "Checkout requires first name, last name and postal code",
+              "preconditions": [
+                "User is logged in as standard_user",
+                "At least one product is in the cart"
+              ],
+              "triggers": [
+                "User starts checkout",
+                "User leaves a required field empty",
+                "User clicks Continue"
+              ],
+              "acceptanceCriteria": [
+                {
+                  "id": "AC-CHK-01",
+                  "text": "An error message names the missing first name"
+                },
+                {
+                  "id": "AC-CHK-02",
+                  "text": "An error message names the missing last name"
+                },
+                {
+                  "id": "AC-CHK-03",
+                  "text": "An error message names the missing postal code"
+                }
+              ],
+              "testType": "Validation"
+            }
+          ]
+        },
+        {
+          "id": "CheckoutFlow",
+          "name": "Complete a purchase",
+          "requirementRef": "BR 4.2",
+          "scenarios": [
+            {
+              "id": "CompleteOrder",
+              "title": "Complete an order end to end",
+              "preconditions": [
+                "User is logged in as standard_user",
+                "At least one product is in the cart"
+              ],
+              "triggers": [
+                "User starts checkout",
+                "User enters valid first name, last name and postal code",
+                "User reviews the order summary",
+                "User clicks Finish"
+              ],
+              "acceptanceCriteria": [
+                {
+                  "id": "AC-CHK-04",
+                  "text": "The order summary lists the selected products with item total, tax and total"
+                },
+                {
+                  "id": "AC-CHK-05",
+                  "text": "A confirmation message thanks the user for the order"
+                },
+                {
+                  "id": "AC-CHK-06",
+                  "text": "The cart is empty after the order is completed"
+                }
+              ],
+              "testType": "End-to-End"
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }

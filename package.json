@@ -2,13 +2,15 @@
   "name": "qa-agent",
   "version": "0.1.0",
   "private": true,
-  "description": "Universal QA Agent — requirement analysis to evidence-backed defect reports, running fully local (Ollama) with optional BYOK escalation.",
+  "description": "Universal QA Agent \u2014 requirement analysis to evidence-backed defect reports, running fully local (Ollama) with optional BYOK escalation.",
   "type": "module",
   "scripts": {
     "qa-agent": "tsx src/cli/index.ts",
     "doctor": "tsx src/cli/index.ts doctor",
     "new": "tsx src/cli/index.ts new",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "validate": "tsx src/cli/index.ts validate",
+    "test": "node --import tsx --test \"tests/**/*.test.ts\""
   },
   "bin": {
     "qa-agent": "./src/cli/index.ts"
@@ -19,6 +21,7 @@
     "typescript": "^5.6.3"
   },
   "dependencies": {
-    "commander": "^12.1.0"
+    "commander": "^12.1.0",
+    "zod": "^4.6.7"
   }
 }

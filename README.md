@@ -32,7 +32,9 @@ npm run qa-agent -- new clientx-shop
 See `QA_Agent_System_Design.md` (agents A1–A8, contracts, folder layout).
 
 ## Commands
-`doctor` · `new <name>` · `ingest` · `generate` · `run` · `rca` · `package`
+`doctor` · `new <name>` · `validate <project>` · `ingest` · `generate` · `run` · `rca` · `package`
+
+Run the tests with `npm test`.
 
 ---
 Built by Kuldeep Tiru — QA professional (manual, automation, API, AI-agent testing).
