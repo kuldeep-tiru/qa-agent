@@ -88,6 +88,8 @@ A local 7B model is **not** as sharp as Claude at deep reasoning. Design respons
 | Tests | Node built-in test runner (`npm test`) | No extra dependency |
 | Regenerating test cases | Never overwrite an edited Excel file; write a versioned copy unless `--force` | You review and edit in Excel, so a silent overwrite would lose work |
 | Test Type column | Column M of `Functional Testing`; values come from the 22 types on the `Coverage` sheet | Coverage counts by type |
+| LLM step expansion | Opt-in (`generate --llm`), JSON-schema constrained output, answers checked by code, cached per scenario, plain steps as fallback | A 7B local model is slow and imperfect, so it never blocks generation and never writes unchecked output |
+| LLM safety checks | Reject invented URLs; code appends any acceptance criterion the model omitted | Keeps traceability and stops made-up data reaching the Excel file |
 
 ---
 

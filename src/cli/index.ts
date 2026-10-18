@@ -5,7 +5,7 @@ import { dirname } from 'node:path';
 import { runDoctor } from './doctor.js';
 import { scaffoldProject } from './scaffold.js';
 import { runValidate } from './validate.js';
-import { runGenerate } from './generate.js';
+import { runGenerate, type GenerateOptions } from './generate.js';
 
 const rootDir = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
 
@@ -34,7 +34,9 @@ program
   .command('generate <project>')
   .description('Requirement graph -> Excel test cases (projects/<project>/test-cases/)')
   .option('--force', 'overwrite the existing file instead of writing a new version')
-  .action((project: string, options: { force?: boolean }) => runGenerate(rootDir, project, options));
+  .option('--llm', 'refine the steps with the local LLM (slow on a laptop; results are cached)')
+  .option('--limit <n>', 'with --llm: ask the model for at most n new scenarios in this run')
+  .action((project: string, options: GenerateOptions) => runGenerate(rootDir, project, options));
 
 // ---- Stubs: every agent exists from day 1, hardened per the roadmap ----
 const stub = (week: string, what: string) => () =>

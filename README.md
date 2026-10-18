@@ -32,7 +32,7 @@ npm run qa-agent -- new clientx-shop
 See `QA_Agent_System_Design.md` (agents A1–A8, contracts, folder layout).
 
 ## Commands
-`doctor` · `new <name>` · `validate <project>` · `ingest` · `generate <project> [--force]` · `run` · `rca` · `package`
+`doctor` · `new <name>` · `validate <project>` · `ingest` · `generate <project> [--force] [--llm] [--limit n]` · `run` · `rca` · `package`
 
 Development: `npm test` runs the tests. `npm run sample:excel` writes a sample test case workbook to `projects/saucedemo-pilot/test-cases/` so you can check the layout in Excel.
 

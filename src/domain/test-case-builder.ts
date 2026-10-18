@@ -36,9 +36,18 @@ export function buildSteps(scenario: Scenario): TestStep[] {
   }));
 }
 
-export function buildTestCases(graph: Graph): TestCase[] {
+/** A test case together with the graph nodes it came from (needed for LLM expansion). */
+export interface TestCaseEntry {
+  testCase: TestCase;
+  moduleName: string;
+  featureName: string;
+  scenario: Scenario;
+  baseUrl?: string;
+}
+
+export function buildTestCaseEntries(graph: Graph): TestCaseEntry[] {
   const counters = new Map<string, number>();
-  const testCases: TestCase[] = [];
+  const entries: TestCaseEntry[] = [];
 
   for (const module of graph.modules) {
     for (const feature of module.features) {
@@ -48,20 +57,29 @@ export function buildTestCases(graph: Graph): TestCase[] {
         counters.set(key, sequence);
 
         const testType = inferTestType(scenario);
-        testCases.push(
-          TestCaseSchema.parse({
-            id: `TC_${key}_${String(sequence).padStart(3, '0')}`,
-            requirementRef: feature.requirementRef,
-            scenario: feature.name,
-            title: buildTitle(scenario.title),
-            preconditions: scenario.preconditions,
-            steps: buildSteps(scenario),
-            priority: inferPriority(scenario, { moduleName: module.name, featureName: feature.name }, testType),
-            testType,
-          }),
-        );
+        const testCase = TestCaseSchema.parse({
+          id: `TC_${key}_${String(sequence).padStart(3, '0')}`,
+          requirementRef: feature.requirementRef,
+          scenario: feature.name,
+          title: buildTitle(scenario.title),
+          preconditions: scenario.preconditions,
+          steps: buildSteps(scenario),
+          priority: inferPriority(scenario, { moduleName: module.name, featureName: feature.name }, testType),
+          testType,
+        });
+        entries.push({
+          testCase,
+          moduleName: module.name,
+          featureName: feature.name,
+          scenario,
+          ...(graph.baseUrl ? { baseUrl: graph.baseUrl } : {}),
+        });
       }
     }
   }
-  return testCases;
+  return entries;
+}
+
+export function buildTestCases(graph: Graph): TestCase[] {
+  return buildTestCaseEntries(graph).map((entry) => entry.testCase);
 }

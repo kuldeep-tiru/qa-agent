@@ -14,3 +14,6 @@ projects/*/.gitkeep
 
 # sample output from `npm run sample:excel`
 projects/*/test-cases/_sample*
+
+# cached LLM step expansions (regenerated on demand)
+projects/*/knowledge/expansion-cache.json*

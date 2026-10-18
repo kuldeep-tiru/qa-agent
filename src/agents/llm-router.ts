@@ -5,6 +5,8 @@
  */
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
+import type { LlmClient } from '../domain/llm-client.js';
+import { OllamaLlmClient } from './ollama-client.js';
 
 export interface AgentConfig {
   llm: {
@@ -12,6 +14,9 @@ export interface AgentConfig {
     chatModel: string;
     embedModel: string;
     anthropicApiKey?: string;
+    /** Optional: per-request limit in ms (default 240000) and Ollama keep-alive (default 30m). */
+    requestTimeoutMs?: number;
+    keepAlive?: string;
   };
   evidence: Record<string, unknown>;
   liveSiteSafety: Record<string, unknown>;
@@ -66,6 +71,16 @@ export async function generate(
   if (!res.ok) throw new Error(`Ollama generate failed: ${res.status}`);
   const data = (await res.json()) as { response: string };
   return data.response;
+}
+
+/** The client agents use for structured (JSON) answers from the primary local model. */
+export function createLlmClient(config: AgentConfig): LlmClient {
+  return new OllamaLlmClient({
+    baseUrl: config.llm.ollamaBaseUrl,
+    model: config.llm.chatModel,
+    ...(config.llm.requestTimeoutMs ? { timeoutMs: config.llm.requestTimeoutMs } : {}),
+    ...(config.llm.keepAlive ? { keepAlive: config.llm.keepAlive } : {}),
+  });
 }
 
 /** Returns the escalation path available right now. */
