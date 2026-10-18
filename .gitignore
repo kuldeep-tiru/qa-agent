@@ -1,0 +1,13 @@
+node_modules/
+dist/
+*.log
+.env
+
+# evidence is heavy — never commit videos/large traces by default
+projects/*/evidence/videos/
+projects/*/evidence/traces/
+projects/*/evidence/har/
+
+# but keep the folders themselves
+!projects/*/.gitkeep
+projects/*/.gitkeep

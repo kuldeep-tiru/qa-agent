@@ -1,0 +1,6 @@
+{
+  "project": "saucedemo-pilot",
+  "version": "0.1",
+  "modules": [],
+  "notes": "Requirement graph. Reviewed by human before test generation. Populated by `qa-agent ingest` (Week 3)."
+}

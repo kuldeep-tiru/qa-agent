@@ -1,0 +1,21 @@
+{
+  "llm": {
+    "ollamaBaseUrl": "http://localhost:11434",
+    "chatModel": "qwen2.5:7b-instruct",
+    "embedModel": "nomic-embed-text",
+    "anthropicApiKey": ""
+  },
+  "evidence": {
+    "screenshotOnFailure": true,
+    "videoOnFailureOnly": true,
+    "traceAlways": true,
+    "harOnFailure": true,
+    "maxVideoMbPerDefect": 50
+  },
+  "liveSiteSafety": {
+    "maxCrawlPages": 25,
+    "requestDelayMs": 1000,
+    "allowedActions": ["read", "form-fill-disposable", "navigate"],
+    "blockedActions": ["purchase-real", "load-test", "bulk-requests"]
+  }
+}
