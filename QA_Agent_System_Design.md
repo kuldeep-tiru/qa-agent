@@ -127,7 +127,7 @@ qa-agent/
 
 ## 7. Agent Contracts (summary)
 
-- **A2 Test Generation:** input = approved `graph.json` + your Excel template → output = filled Excel (TC IDs like `TC_<Module>_<Scenario>_001`, Requirement # mapped to doc sections, Priority heuristic: login/payment/checkout = High) Priority, Status and Test Type are written once per case, on the first row of each block.
+- **A2 Test Generation:** input = approved `graph.json` + your Excel template → output = filled Excel (TC IDs like `TC_<Module>_<Scenario>_001`, Requirement # mapped to doc sections, Priority heuristic: login/payment/checkout = High) Priority, Status and Test Type are written once per case, on the first row of each block. Priority rules: the main path of login, payment and checkout flows = High; negative, validation, error and boundary cases on those flows = Medium; everything else = Low; a priority or test type set in `graph.json` always wins. Steps start as one step per scenario trigger with the acceptance criteria as the expected result, and the LLM only refines them.
 - **A3 Execution:** runs `tests/`, never deletes evidence, writes `results.json` keyed by Test Case Id (traceability)
 - **A5 RCA:** input = failure bundle (trace + console + HAR + last screenshot) → pattern-match known signatures (5xx, selector-not-found, timeout-after-redirect, console-error…) → LLM writes hypothesis + suggested fix → confidence score; low confidence ⇒ export `rca-brief.md` for Claude-web escalation
 - **A6 Defect Draft:** one markdown per defect + Defects sheet row; **never auto-final** — status stays `Draft` until you approve

@@ -5,6 +5,7 @@ import { dirname } from 'node:path';
 import { runDoctor } from './doctor.js';
 import { scaffoldProject } from './scaffold.js';
 import { runValidate } from './validate.js';
+import { runGenerate } from './generate.js';
 
 const rootDir = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
 
@@ -29,12 +30,17 @@ program
   .description('Validate projects/<project>/graph.json against the requirement graph schema')
   .action((project: string) => runValidate(rootDir, project));
 
+program
+  .command('generate <project>')
+  .description('Requirement graph -> Excel test cases (projects/<project>/test-cases/)')
+  .option('--force', 'overwrite the existing file instead of writing a new version')
+  .action((project: string, options: { force?: boolean }) => runGenerate(rootDir, project, options));
+
 // ---- Stubs: every agent exists from day 1, hardened per the roadmap ----
 const stub = (week: string, what: string) => () =>
   console.log(`\n[${what}] arrives ${week}. See QA_Agent_System_Design.md section 8 (Build Order).\n`);
 
 program.command('ingest').description('PDF / URL / GitHub -> requirement graph').action(stub('Week 3', 'Adapters + Requirement Graph Builder'));
-program.command('generate').description('Requirement graph -> Excel test cases').action(stub('Week 2', 'A2 Test Generation (exceljs)'));
 program.command('run').description('Execute auto + manual suites').action(stub('Weeks 4-5', 'A3 Execution Agent + A8 Manual Runner'));
 program.command('rca').description('Failure evidence -> root cause hypothesis').action(stub('Week 6', 'A5 RCA Agent'));
 program.command('package').description('ZIP + portfolio README for GitHub').action(stub('Week 7', 'A7 Packaging Agent'));

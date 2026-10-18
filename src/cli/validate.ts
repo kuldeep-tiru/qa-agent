@@ -1,13 +1,11 @@
 import { graphPath, loadGraphFile } from '../adapters/graph-file.js';
 import { graphStats } from '../domain/graph.js';
-
-/** Project names are folder names: no path separators or parent references. */
-const SAFE_PROJECT_NAME = /^[A-Za-z0-9][A-Za-z0-9._-]*$/;
+import { isSafeProjectName } from './project-name.js';
 
 export function runValidate(rootDir: string, project: string): void {
   console.log(`\nqa-agent validate ${project}\n${'='.repeat(18 + project.length)}\n`);
 
-  if (!SAFE_PROJECT_NAME.test(project)) {
+  if (!isSafeProjectName(project)) {
     console.log('  [FAIL] invalid project name (use letters, digits, . _ or - only)\n');
     process.exitCode = 1;
     return;
