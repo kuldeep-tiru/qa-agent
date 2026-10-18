@@ -11,3 +11,6 @@ projects/*/evidence/har/
 # but keep the folders themselves
 !projects/*/.gitkeep
 projects/*/.gitkeep
+
+# sample output from `npm run sample:excel`
+projects/*/test-cases/_sample*

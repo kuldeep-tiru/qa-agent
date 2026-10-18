@@ -10,7 +10,8 @@
     "new": "tsx src/cli/index.ts new",
     "typecheck": "tsc --noEmit",
     "validate": "tsx src/cli/index.ts validate",
-    "test": "node --import tsx --test \"tests/**/*.test.ts\""
+    "test": "node --import tsx --test \"tests/**/*.test.ts\"",
+    "sample:excel": "tsx scripts/write-sample-excel.ts"
   },
   "bin": {
     "qa-agent": "./src/cli/index.ts"
@@ -22,6 +23,7 @@
   },
   "dependencies": {
     "commander": "^12.1.0",
+    "exceljs": "^4.4.0",
     "zod": "^4.6.7"
   }
 }

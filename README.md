@@ -34,7 +34,7 @@ See `QA_Agent_System_Design.md` (agents A1–A8, contracts, folder layout).
 ## Commands
 `doctor` · `new <name>` · `validate <project>` · `ingest` · `generate` · `run` · `rca` · `package`
 
-Run the tests with `npm test`.
+Development: `npm test` runs the tests. `npm run sample:excel` writes a sample test case workbook to `projects/saucedemo-pilot/test-cases/` so you can check the layout in Excel.
 
 ---
 Built by Kuldeep Tiru — QA professional (manual, automation, API, AI-agent testing).
