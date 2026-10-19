@@ -43,6 +43,11 @@ export async function listLocalModels(baseUrl: string): Promise<string[]> {
   return (data.models ?? []).map((m) => m.name);
 }
 
+/** True when the model is installed: exact name, or the same name tagged :latest. */
+export function hasModel(installed: readonly string[], name: string): boolean {
+  return installed.some((m) => m === name || m === `${name}:latest`);
+}
+
 export interface GenerateOptions {
   model?: string;
   system?: string;

@@ -1,6 +1,6 @@
 # Universal QA Agent — System Design Document
 **Owner:** Kuldeep Tiru | **Platform:** Windows 11, VS Code, PowerShell | **Stack:** Node.js + TypeScript + Playwright + Ollama
-**Repo:** `kuldeep-tiru/qa-agent` (public portfolio) | **Version:** 1.1
+**Repo:** `kuldeep-tiru/qa-agent` (public portfolio) | **Version:** 1.2
 
 ---
 
@@ -141,8 +141,8 @@ qa-agent/
 
 | Week | Deliverable | Exit criteria |
 |---|---|---|
-| 1 | Repo + CLI skeleton + config + LLM router (Ollama ping) | `qa-agent new` scaffolds a project |
-| 2 | Excel writer + A2 Test Generation (from a hand-written graph.json) | Excel output matches your template columns |
+| 1 | Repo + CLI skeleton + config + LLM router (Ollama ping) ✅ | `qa-agent new` scaffolds a project |
+| 2 | Excel writer + A2 Test Generation (from a hand-written graph.json) ✅ | Excel output matches your template columns (checked by `tests/week2-exit.test.ts`) |
 | 3 | Adapters: PDF ingest + URL crawl → graph builder | Feed SauceDemo URL → get scenario graph |
 | 4 | A3 Execution + Evidence (Playwright, video-on-fail, trace) | Runs generated login tests, bundles evidence |
 | 5 | A8 Manual Runner + results merge | Full loop: generate → execute → results.json |

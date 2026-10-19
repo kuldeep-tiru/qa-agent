@@ -16,11 +16,19 @@ npm run doctor          # verify environment — every check should be [OK]
 npm run qa-agent -- new clientx-shop
 ```
 
+## Typical workflow (Week 2)
+```powershell
+npm run qa-agent -- validate saucedemo-pilot                    # check graph.json against the schema
+npm run qa-agent -- generate saucedemo-pilot                    # graph -> Excel test cases in seconds (plain steps)
+npm run qa-agent -- generate saucedemo-pilot --llm --limit 3    # refine steps with the local LLM, 3 new scenarios at a time
+```
+Open `projects/saucedemo-pilot/test-cases/` in Excel, review and edit. Re-running never overwrites your file: it saves `-v2`, `-v3` ... unless you pass `--force`. LLM answers are cached per scenario in `knowledge/expansion-cache.json`.
+
 ## Roadmap (all modules stubbed from day 1)
 | Week | Deliverable |
 |---|---|
 | 1 | Repo + CLI + LLM router + `doctor` ✅ |
-| 2 | Excel writer + A2 Test Generation |
+| 2 | Excel writer + A2 Test Generation ✅ |
 | 3 | PDF/URL/GitHub adapters + Requirement Graph |
 | 4 | A3 Execution + Evidence capture |
 | 5 | A8 Manual Runner |
@@ -34,7 +42,7 @@ See `QA_Agent_System_Design.md` (agents A1–A8, contracts, folder layout).
 ## Commands
 `doctor` · `new <name>` · `validate <project>` · `ingest` · `generate <project> [--force] [--llm] [--limit n]` · `run` · `rca` · `package`
 
-Development: `npm test` runs the tests. `npm run sample:excel` writes a sample test case workbook to `projects/saucedemo-pilot/test-cases/` so you can check the layout in Excel.
+Development: `npm run check` runs the typecheck and all tests. `npm run sample:excel` writes a sample test case workbook to `projects/saucedemo-pilot/test-cases/` so you can check the layout in Excel.
 
 ---
 Built by Kuldeep Tiru — QA professional (manual, automation, API, AI-agent testing).

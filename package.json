@@ -11,7 +11,8 @@
     "typecheck": "tsc --noEmit",
     "validate": "tsx src/cli/index.ts validate",
     "test": "node --import tsx --test \"tests/**/*.test.ts\"",
-    "sample:excel": "tsx scripts/write-sample-excel.ts"
+    "sample:excel": "tsx scripts/write-sample-excel.ts",
+    "check": "npm run typecheck && npm test"
   },
   "bin": {
     "qa-agent": "./src/cli/index.ts"

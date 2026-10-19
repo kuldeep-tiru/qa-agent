@@ -1,4 +1,6 @@
-import { loadConfig, pingOllama, listLocalModels, escalationPath } from '../agents/llm-router.js';
+import { join } from 'node:path';
+import { loadConfig, pingOllama, listLocalModels, escalationPath, hasModel } from '../agents/llm-router.js';
+import { inspectTemplate } from '../excel/template-writer.js';
 
 const ok = (msg: string) => console.log(`  [OK]   ${msg}`);
 const fail = (msg: string) => console.log(`  [FAIL] ${msg}`);
@@ -23,7 +25,13 @@ export async function runDoctor(rootDir: string): Promise<void> {
     return;
   }
 
-  // 3. Ollama reachable
+  // 3. Excel template
+  const template = await inspectTemplate(join(rootDir, 'templates', 'QA Test Case Template.xlsx'));
+  template.ok
+    ? ok(`Excel template ready (${template.columnCount} columns on the Functional Testing sheet)`)
+    : fail(`Excel template: ${template.error}`);
+
+  // 4. Ollama reachable
   const up = await pingOllama(config.llm.ollamaBaseUrl);
   if (!up) {
     fail(`Ollama not reachable at ${config.llm.ollamaBaseUrl}`);
@@ -32,17 +40,16 @@ export async function runDoctor(rootDir: string): Promise<void> {
   }
   ok(`Ollama reachable at ${config.llm.ollamaBaseUrl}`);
 
-  // 4. Required models
+  // 5. Required models
   const models = await listLocalModels(config.llm.ollamaBaseUrl);
   const want = [config.llm.chatModel, config.llm.embedModel];
   for (const m of want) {
-    const found = models.some((x) => x.startsWith(m.split(':')[0]));
-    found
+    hasModel(models, m)
       ? ok(`model present: ${m}`)
       : fail(`model missing: ${m}  ->  ollama pull ${m}`);
   }
 
-  // 5. Escalation path
+  // 6. Escalation path
   info(`escalation path: ${escalationPath(config)} (add ANTHROPIC_API_KEY to config to upgrade)`);
 
   console.log('\nDone.\n');

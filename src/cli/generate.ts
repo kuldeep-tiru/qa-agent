@@ -1,7 +1,7 @@
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { graphPath, loadGraphFile } from '../adapters/graph-file.js';
-import { createLlmClient, listLocalModels, loadConfig, pingOllama } from '../agents/llm-router.js';
+import { createLlmClient, hasModel, listLocalModels, loadConfig, pingOllama } from '../agents/llm-router.js';
 import { StepExpander } from '../agents/step-expander.js';
 import { TestGeneration, type GenerationEvent } from '../agents/test-generation.js';
 import { FileExpansionCache } from '../knowledge/expansion-cache.js';
@@ -67,7 +67,7 @@ export async function runGenerate(rootDir: string, project: string, options: Gen
       return fail(`Ollama is not reachable at ${ollamaBaseUrl}. Start Ollama, or run without --llm.`);
     }
     const models = await listLocalModels(ollamaBaseUrl);
-    if (!models.some((m) => m === chatModel || m === `${chatModel}:latest`)) {
+    if (!hasModel(models, chatModel)) {
       return fail(`model ${chatModel} is not installed. Run: ollama pull ${chatModel}`);
     }
     expander = new StepExpander({

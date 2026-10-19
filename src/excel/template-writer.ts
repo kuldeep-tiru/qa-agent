@@ -114,6 +114,23 @@ function formatPreconditions(items: readonly string[]): string {
   return items.map((p, i) => `${i + 1}. ${p}`).join('\n');
 }
 
+export type TemplateCheck = { ok: true; columnCount: number } | { ok: false; error: string };
+
+/** Checks that a template file can be opened and has every header the writer needs. */
+export async function inspectTemplate(templatePath: string): Promise<TemplateCheck> {
+  if (!existsSync(templatePath)) return { ok: false, error: `not found: ${templatePath}` };
+  try {
+    const wb = new ExcelJS.Workbook();
+    await wb.xlsx.readFile(templatePath);
+    const ws = wb.getWorksheet(SHEET_NAME);
+    if (!ws) return { ok: false, error: `no "${SHEET_NAME}" sheet` };
+    const columns = findColumns(ws);
+    return { ok: true, columnCount: Object.keys(columns).length };
+  } catch (err) {
+    return { ok: false, error: err instanceof Error ? err.message : String(err) };
+  }
+}
+
 export class ExcelTestCaseSink implements TestCaseSink {
   constructor(private readonly options: ExcelSinkOptions) {}
 
