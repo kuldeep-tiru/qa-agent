@@ -3,10 +3,10 @@ dist/
 *.log
 .env
 
-# evidence is heavy — never commit videos/large traces by default
-projects/*/evidence/videos/
-projects/*/evidence/traces/
-projects/*/evidence/har/
+# evidence is heavy and may hold client data: runs are not committed by default.
+# To publish a run on purpose (for example a SauceDemo portfolio run), use: git add -f <path>
+projects/*/evidence/*
+!projects/*/evidence/.gitkeep
 
 # but keep the folders themselves
 !projects/*/.gitkeep

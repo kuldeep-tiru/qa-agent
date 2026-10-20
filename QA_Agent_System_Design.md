@@ -1,6 +1,6 @@
 # Universal QA Agent — System Design Document
 **Owner:** Kuldeep Tiru | **Platform:** Windows 11, VS Code, PowerShell | **Stack:** Node.js + TypeScript + Playwright + Ollama
-**Repo:** `kuldeep-tiru/qa-agent` (public portfolio) | **Version:** 1.2
+**Repo:** `kuldeep-tiru/qa-agent` (public portfolio) | **Version:** 1.3
 
 ---
 
@@ -83,6 +83,10 @@ A local 7B model is **not** as sharp as Claude at deep reasoning. Design respons
 | CLI | `commander` | `qa-agent <command>` ergonomics |
 | Scheduling | PowerShell scripts first; **n8n later** as visual workflow layer | Don't add n8n complexity on day 1 |
 | Evidence policy | Trace always; video **on-failure only** (disk safety); screenshots on failure + on manual-test capture | 321GB free disk won't survive full-suite video |
+| Test runner | `@playwright/test` (standard Playwright Test), started by `qa-agent run auto <project>` | Built-in parallelism, reporters, screenshot/video/trace; generated tests are ordinary Playwright specs |
+| Evidence layout | `evidence/<runId>/<TestCaseId>/` with `trace.zip`, `failure.png`, `video.webm`, `network.har`, `console.log`, `error-context.md`; HAR is recorded for every test but kept only for failures; skipped tests keep nothing | Evidence is found by Test Case Id; nothing is deleted except the HAR of passed tests |
+| Spec naming | A spec title starts with the Test Case Id, for example `TC_Auth_ValidLogin_001 Verify login...` | Results and evidence are keyed by ID; specs without an ID are reported with a warning |
+| Browser | Playwright Chromium only; `QA_AGENT_BROWSER` can point to another browser | About 150 MB; enough for the pilot |
 | Live-site safety | Read-only flows; disposable emails/phones; **no load testing on production**; gentle crawl rate | Client trust + legality |
 | Schema validation | Zod, strict objects | Typos in hand-written `graph.json` fail loudly; the same schemas validate LLM output |
 | Tests | Node built-in test runner (`npm test`) | No extra dependency |
@@ -106,9 +110,9 @@ qa-agent/
 │   ├── domain/                ← graph and test-type schemas (pure, no I/O)
 │   ├── agents/                ← A1–A8, orchestrator, llm-router
 │   ├── knowledge/             ← chromadb client, embeddings
-│   ├── runners/               ← playwright, manual-checklist
+│   ├── runners/               ← playwright config + evidence fixtures, manual-checklist
 │   ├── excel/                 ← template writer (exceljs)
-│   ├── evidence/              ← screenshot/video/trace/HAR bundler
+│   ├── evidence/              ← Playwright report parser + evidence bundler
 │   └── packaging/             ← zip + README generator
 ├── templates/
 │   ├── QA Test Case Template.xlsx   ← your master template
@@ -120,7 +124,7 @@ qa-agent/
         ├── graph.json         ← requirement graph (reviewable)
         ├── test-cases/        ← filled Excel
         ├── tests/             ← generated Playwright specs
-        ├── evidence/          ← screenshots/videos/traces/HAR
+        ├── evidence/          ← one folder per run: <runId>/<TestCaseId>/ (git-ignored by default)
         ├── defects/           ← markdown drafts + defect Excel
         └── reports/           ← summary HTML/markdown
 ```
@@ -144,7 +148,7 @@ qa-agent/
 | 1 | Repo + CLI skeleton + config + LLM router (Ollama ping) ✅ | `qa-agent new` scaffolds a project |
 | 2 | Excel writer + A2 Test Generation (from a hand-written graph.json) ✅ | Excel output matches your template columns (checked by `tests/week2-exit.test.ts`) |
 | 3 | Adapters: PDF ingest + URL crawl → graph builder | Feed SauceDemo URL → get scenario graph |
-| 4 | A3 Execution + Evidence (Playwright, video-on-fail, trace) | Runs generated login tests, bundles evidence |
+| 4 | A3 Execution + Evidence (Playwright, video-on-fail, trace) | Runs generated login tests, bundles evidence. Status: capture, bundling and results.json built and tested; Playwright spec generation from test cases still to do |
 | 5 | A8 Manual Runner + results merge | Full loop: generate → execute → results.json |
 | 6 | A5 RCA + A6 Defect Drafts | Failure produces defect draft with evidence |
 | 7 | A7 Packaging + portfolio README | SauceDemo pilot end-to-end + GitHub publish |

@@ -6,6 +6,7 @@ import { runDoctor } from './doctor.js';
 import { scaffoldProject } from './scaffold.js';
 import { runValidate } from './validate.js';
 import { runGenerate, type GenerateOptions } from './generate.js';
+import { runRun, type RunOptions } from './run.js';
 
 const rootDir = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
 
@@ -38,12 +39,19 @@ program
   .option('--limit <n>', 'with --llm: ask the model for at most n new scenarios in this run')
   .action((project: string, options: GenerateOptions) => runGenerate(rootDir, project, options));
 
+program
+  .command('run <mode> <project>')
+  .description('Execute tests: auto (Playwright, with evidence) or manual (Week 5)')
+  .option('--headed', 'show the browser window while the tests run')
+  .option('--grep <pattern>', 'only run tests whose title matches, for example a Test Case Id')
+  .option('--demo-failure', 'also run the deliberate failing demo test to prove evidence capture')
+  .action((mode: string, project: string, options: RunOptions) => runRun(rootDir, mode, project, options));
+
 // ---- Stubs: every agent exists from day 1, hardened per the roadmap ----
 const stub = (week: string, what: string) => () =>
   console.log(`\n[${what}] arrives ${week}. See QA_Agent_System_Design.md section 8 (Build Order).\n`);
 
 program.command('ingest').description('PDF / URL / GitHub -> requirement graph').action(stub('Week 3', 'Adapters + Requirement Graph Builder'));
-program.command('run').description('Execute auto + manual suites').action(stub('Weeks 4-5', 'A3 Execution Agent + A8 Manual Runner'));
 program.command('rca').description('Failure evidence -> root cause hypothesis').action(stub('Week 6', 'A5 RCA Agent'));
 program.command('package').description('ZIP + portfolio README for GitHub').action(stub('Week 7', 'A7 Packaging Agent'));
 

@@ -1,0 +1,124 @@
+{
+  "project": "saucedemo-pilot",
+  "runId": "20261020-175743",
+  "startedAt": "2026-10-20T12:27:43.806Z",
+  "durationMs": 9667.892,
+  "baseUrl": "https://www.saucedemo.com",
+  "summary": {
+    "total": 5,
+    "passed": 4,
+    "failed": 1,
+    "timedOut": 0,
+    "skipped": 0,
+    "interrupted": 0
+  },
+  "results": {
+    "TC_Auth_ValidLogin_001": {
+      "id": "TC_Auth_ValidLogin_001",
+      "mapped": true,
+      "title": "TC_Auth_ValidLogin_001 Verify login with a valid username and password",
+      "file": "auth.spec.ts",
+      "status": "passed",
+      "durationMs": 1061,
+      "evidence": [
+        {
+          "kind": "trace",
+          "path": "evidence/20261020-175743/TC_Auth_ValidLogin_001/trace.zip",
+          "sizeBytes": 317829
+        }
+      ],
+      "warnings": []
+    },
+    "TC_Auth_InvalidPassword_001": {
+      "id": "TC_Auth_InvalidPassword_001",
+      "mapped": true,
+      "title": "TC_Auth_InvalidPassword_001 Verify login with a valid username and a wrong password",
+      "file": "auth.spec.ts",
+      "status": "passed",
+      "durationMs": 656,
+      "evidence": [
+        {
+          "kind": "trace",
+          "path": "evidence/20261020-175743/TC_Auth_InvalidPassword_001/trace.zip",
+          "sizeBytes": 140502
+        }
+      ],
+      "warnings": []
+    },
+    "TC_Auth_LockedOutUser_001": {
+      "id": "TC_Auth_LockedOutUser_001",
+      "mapped": true,
+      "title": "TC_Auth_LockedOutUser_001 Verify login is blocked for a locked out user",
+      "file": "auth.spec.ts",
+      "status": "passed",
+      "durationMs": 631,
+      "evidence": [
+        {
+          "kind": "trace",
+          "path": "evidence/20261020-175743/TC_Auth_LockedOutUser_001/trace.zip",
+          "sizeBytes": 142631
+        }
+      ],
+      "warnings": []
+    },
+    "TC_Auth_EmptyCredentials_001": {
+      "id": "TC_Auth_EmptyCredentials_001",
+      "mapped": true,
+      "title": "TC_Auth_EmptyCredentials_001 Verify login with empty username and password",
+      "file": "auth.spec.ts",
+      "status": "passed",
+      "durationMs": 613,
+      "evidence": [
+        {
+          "kind": "trace",
+          "path": "evidence/20261020-175743/TC_Auth_EmptyCredentials_001/trace.zip",
+          "sizeBytes": 120984
+        }
+      ],
+      "warnings": []
+    },
+    "TC_Demo_ExpectedFailure_001": {
+      "id": "TC_Demo_ExpectedFailure_001",
+      "mapped": true,
+      "title": "TC_Demo_ExpectedFailure_001 Deliberate failure to prove evidence capture",
+      "file": "evidence-demo.spec.ts",
+      "status": "failed",
+      "durationMs": 5823,
+      "error": "Error: expect(page).toHaveTitle(expected) failed\n\nExpected: \"This title is wrong on purpose\"\nReceived: \"Swag Labs\"\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveTitle\" with timeout 5000ms\n    14 × locator resolved to <html lang=\"en\">…</html>\n       - unexpected value \"Swag Labs\"",
+      "evidence": [
+        {
+          "kind": "screenshot",
+          "path": "evidence/20261020-175743/TC_Demo_ExpectedFailure_001/failure.png",
+          "sizeBytes": 27092
+        },
+        {
+          "kind": "console",
+          "path": "evidence/20261020-175743/TC_Demo_ExpectedFailure_001/console.log",
+          "sizeBytes": 394
+        },
+        {
+          "kind": "video",
+          "path": "evidence/20261020-175743/TC_Demo_ExpectedFailure_001/video.webm",
+          "sizeBytes": 134828
+        },
+        {
+          "kind": "context",
+          "path": "evidence/20261020-175743/TC_Demo_ExpectedFailure_001/error-context.md",
+          "sizeBytes": 1747
+        },
+        {
+          "kind": "trace",
+          "path": "evidence/20261020-175743/TC_Demo_ExpectedFailure_001/trace.zip",
+          "sizeBytes": 282823
+        },
+        {
+          "kind": "har",
+          "path": "evidence/20261020-175743/TC_Demo_ExpectedFailure_001/network.har",
+          "sizeBytes": 710220
+        }
+      ],
+      "warnings": []
+    }
+  },
+  "warnings": []
+}
